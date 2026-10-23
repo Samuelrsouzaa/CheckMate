@@ -25,7 +25,7 @@ app = FastAPI(
 # que o nosso frontend acesse este servidor".
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Em produção colocaríamos apenas o link oficial do nosso site
+    allow_origins=settings.cors_origins_list,  # Em produção colocaríamos apenas o link oficial do nosso site
     allow_credentials=True,
     allow_methods=["*"],  # Permite métodos HTTP como GET, POST, PUT, DELETE
     allow_headers=["*"],

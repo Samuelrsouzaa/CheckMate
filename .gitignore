@@ -43,3 +43,9 @@ htmlcov/
 .idea/
 *.swp
 *.swo
+
+# VS Code
+.vscode/
+
+# Banco local
+sql_app.db
