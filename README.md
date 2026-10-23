@@ -1,113 +1,176 @@
-# CheckMate ♟️ - Smart Checklist & Productivity API
+# CheckMate: API de Checklists e Produtividade
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
+[![CI](https://github.com/Samuelrsouzaa/CheckMate/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuelrsouzaa/CheckMate/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688.svg)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED.svg)](https://www.docker.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A robust, containerized RESTful API and productivity tool built for task and checklist management. Engineered with **Clean Architecture**, automated testing, database migrations, and a clean web interface.
+> **English summary:** CheckMate is a containerized REST API (Python, FastAPI, PostgreSQL) with JWT authentication, Alembic migrations and an automated pytest suite, plus a vanilla JS web client. It lets students organize their studies with checklists and tasks. Built solo as a university project; used regularly by a real user.
 
-> 🎓 **Academic Context**: This application was developed as a comprehensive practical final project for university coursework in software engineering and web backend development. It was designed to demonstrate industry-standard software design patterns, end-to-end containerization, authentication security, relational database design, and unit/integration testing.
+Aplicação web para **estudantes organizarem seus estudos** com checklists e tarefas. É composta por uma **API REST** (Python/FastAPI) e um **cliente web** em HTML, CSS e JavaScript puro.
 
----
-
-## 🎯 Features
-
-- **Authentication & Security**: User registration, login, and token-based authentication using **OAuth2 with JWT (JSON Web Tokens)** and **Bcrypt** password hashing.
-- **Task & Checklist Management**: Full CRUD operations for checklists and sub-tasks with status toggles, prioritization, and categorization.
-- **Tagging & Filtering**: Organize tasks and checklists with custom tags for productivity tracking.
-- **Dashboard & Metrics**: Dedicated dashboard endpoints delivering real-time statistics on completed vs. pending tasks.
-- **Audit Logging**: System audit logs recording critical user actions.
-- **Interactive Documentation**: Auto-generated OpenAPI / Swagger UI and ReDoc interfaces.
-- **Frontend Dashboard**: Responsive web client for interacting with the API in real time.
+Projeto individual, desenvolvido na graduação em Ciência da Computação (CEUB). Usei ferramentas de IA como apoio durante o desenvolvimento, e revisei e entendi o código que integrei.
 
 ---
 
-## 🏗️ Architecture & Design Patterns
+## Funcionalidades
 
-The codebase strictly follows **Clean Architecture** and separation of concerns:
+- **Autenticação e segurança:** cadastro e login com **OAuth2 + JWT**; senhas armazenadas com hash **Bcrypt**; validação de e-mail e tamanho mínimo de senha (8 caracteres).
+- **Isolamento de dados:** cada usuário só acessa os próprios checklists, tarefas e tags. Tentativas de acessar dados de outro usuário retornam `404`.
+- **Checklists e tarefas:** CRUD completo, prioridade (`HIGH`, `MED`, `LOW`), status (`PENDING`, `DONE`, `LATE`) e data limite.
+- **Tags:** criação e listagem de tags personalizadas.
+- **Dashboard:** métricas de tarefas totais, concluídas, pendentes e atrasadas.
+- **Documentação interativa:** Swagger UI e ReDoc gerados automaticamente pelo FastAPI.
+
+### Regras de negócio implementadas
+| Regra | Comportamento |
+|---|---|
+| Limite por conta | No máximo 50 checklists ativos (`403` ao exceder) |
+| Exclusão de checklist | Bloqueada enquanto houver tarefas pendentes (`400`) |
+| Exclusão de tarefa | *Soft delete*: a tarefa recebe `deletedAt` e some das listagens |
+| Conclusão de tarefa | Ao marcar como `DONE`, o `completedAt` é preenchido |
+| Título de tarefa | Mínimo de 3 caracteres (`422`) |
+
+---
+
+## Endpoints
+
+Todos os endpoints, exceto `register` e `login`, exigem o header `Authorization: Bearer <token>`.
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/api/auth/register` | Cria uma conta |
+| `POST` | `/api/auth/login` | Autentica e retorna o token JWT |
+| `GET` | `/api/checklists/` | Lista os checklists do usuário |
+| `POST` | `/api/checklists/` | Cria um checklist |
+| `PUT` | `/api/checklists/{id}` | Atualiza ou arquiva um checklist |
+| `DELETE` | `/api/checklists/{id}` | Remove um checklist |
+| `GET` | `/api/tasks/checklist/{id}` | Lista as tarefas de um checklist |
+| `POST` | `/api/tasks/` | Cria uma tarefa |
+| `PUT` | `/api/tasks/{id}` | Atualiza uma tarefa (inclusive o status) |
+| `DELETE` | `/api/tasks/{id}` | Move a tarefa para a lixeira |
+| `GET` | `/api/tags/` | Lista as tags do usuário |
+| `POST` | `/api/tags/` | Cria uma tag |
+| `GET` | `/api/dashboard/` | Retorna as métricas de tarefas |
+
+---
+
+## Arquitetura
+
+O código é dividido em camadas, com cada uma cuidando de uma responsabilidade:
 
 ```
 app/
-├── api/          # Presentation Layer: REST endpoints, routing, dependency injection (FastAPI)
-├── core/         # Core Configurations: Security, JWT tokens, environment settings
-├── db/           # Infrastructure: Database engine session, connection pool
-├── models/       # Domain Layer: SQLAlchemy ORM database models
-├── schemas/      # Application Layer: Pydantic schemas (DTOs & payload validation)
-└── services/     # Business Logic Layer: Service classes and domain use cases
+├── api/        # Camada de apresentação: rotas REST e injeção de dependências (FastAPI)
+├── core/       # Configurações, segurança, hash de senha e tokens JWT
+├── db/         # Engine e sessão do banco de dados
+├── models/     # Modelos ORM (SQLAlchemy)
+├── schemas/    # Schemas Pydantic (validação de entrada e saída)
+└── services/   # Regras de negócio
+alembic/        # Migrations do banco de dados
+frontend/       # Cliente web (HTML, CSS e JavaScript puro)
+tests/          # Testes automatizados (pytest)
 ```
 
+## Stack
+
+| Camada | Tecnologias |
+|---|---|
+| Back-end | Python 3.10, FastAPI, Pydantic v2 |
+| Banco de dados | PostgreSQL, SQLAlchemy, Alembic |
+| Segurança | JWT (PyJWT), Bcrypt (passlib), OAuth2 |
+| Infraestrutura | Docker, Docker Compose, Adminer |
+| Testes e CI | pytest, GitHub Actions |
+| Front-end | HTML5, CSS3, JavaScript (Fetch API) |
+
 ---
 
-## 🛠️ Tech Stack
+## Como executar
 
-- **Backend**: Python 3.11, [FastAPI](https://fastapi.tiangolo.com/), [Pydantic v2](https://docs.pydantic.dev/)
-- **Database & ORM**: PostgreSQL, [SQLAlchemy](https://www.sqlalchemy.org/), [Alembic](https://alembic.sqlalchemy.org/) (Migrations)
-- **Containerization**: Docker, Docker Compose
-- **Testing**: [pytest](https://docs.pytest.org/), SQLite (isolated in-memory test database)
-- **Database Management Tool**: Adminer
-- **Frontend**: HTML5, Modern CSS3, JavaScript (Fetch API)
+### Pré-requisitos
+[Docker Desktop](https://www.docker.com/products/docker-desktop/) e [Git](https://git-scm.com/).
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
-- [Git](https://git-scm.com/) installed.
-
-### 1. Clone the repository
+### 1. Clonar e configurar
 ```bash
 git clone https://github.com/Samuelrsouzaa/CheckMate.git
 cd CheckMate
+cp .env.example .env   # no Windows (PowerShell): Copy-Item .env.example .env
 ```
+Edite o `.env` e troque a senha do banco e a `SECRET_KEY`. Sem o `.env`, o Compose usa valores padrão **apenas para desenvolvimento**.
 
-### 2. Run with Docker Compose
-Spin up the entire application stack (API server, PostgreSQL database, and Adminer):
+### 2. Subir os serviços
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
+docker compose exec api alembic upgrade head
 ```
 
-### 3. Run Database Migrations
-Apply the initial database schema using Alembic:
-```bash
-docker-compose exec api alembic upgrade head
-```
+| Serviço | URL |
+|---|---|
+| API e Swagger UI | http://localhost:8000/docs |
+| ReDoc | http://localhost:8000/redoc |
+| Adminer (admin do banco) | http://localhost:8080 |
+| Cliente web | abra `frontend/index.html` no navegador |
 
-The services will be available at:
-- **API & Live Documentation (Swagger UI)**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Alternative Documentation (ReDoc)**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
-- **Database Web Admin (Adminer)**: [http://localhost:8080](http://localhost:8080)
-- **Web Frontend**: Open `frontend/index.html` in your web browser.
+No Adminer, use o sistema **PostgreSQL**, o servidor `db` e as credenciais definidas no seu `.env`.
 
 ---
 
-## 🧪 Running Automated Tests
+## Testes
 
-The automated test suite runs against an isolated, high-performance in-memory SQLite database (`sqlite:///:memory:`):
+A suíte tem **25 testes automatizados** e roda em um banco SQLite em memória, isolado do PostgreSQL. Eles cobrem:
+
+- autenticação, tokens inválidos e senhas armazenadas como hash Bcrypt;
+- isolamento de dados entre usuários;
+- CRUD de checklists, tarefas e tags;
+- regras de negócio e métricas do dashboard.
 
 ```bash
-docker-compose exec api pytest -v
+# Com Docker
+docker compose exec api pytest -v
+
+# Ou localmente
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+pytest -v
 ```
 
----
-
-## 🗄️ Database Management (Adminer)
-
-To inspect database records directly via the Adminer UI at `http://localhost:8080`:
-- **System**: PostgreSQL
-- **Server**: `db`
-- **Username**: `checkmate_user`
-- **Password**: `checkmate_pass`
-- **Database**: `checkmate_db`
+O GitHub Actions executa a mesma suíte a cada push e pull request.
 
 ---
 
-## 👤 Author
+## Variáveis de ambiente
 
-Developed by **Samuel Souza** and project partner as an academic capstone/practical project.
+| Variável | Descrição | Padrão (dev) |
+|---|---|---|
+| `DATABASE_URL` | String de conexão do banco | SQLite local |
+| `SECRET_KEY` | Chave de assinatura do JWT | valor de desenvolvimento |
+| `ALGORITHM` | Algoritmo do JWT | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Validade do token | `1440` |
+| `CORS_ORIGINS` | Origens permitidas, separadas por vírgula | `*` |
+
+> Em produção, defina uma `SECRET_KEY` forte e limite o `CORS_ORIGINS` ao domínio do front-end.
+
+---
+
+## Próximos passos
+
+- [ ] Notificações e lembretes de prazo (a tabela `notifications` já existe no modelo)
+- [ ] Registro de ações críticas em `audit_logs` (tabela já modelada)
+- [ ] Atualização automática do status `LATE` para tarefas vencidas
+- [ ] Limite de tentativas de login (*rate limiting*)
+- [ ] Deploy online com HTTPS
+- [ ] Interface em React
+
+---
+
+## Autor
+
+**Samuel Souza**, estudante de Ciência da Computação (CEUB)
 
 - GitHub: [@Samuelrsouzaa](https://github.com/Samuelrsouzaa)
-- Email: [samuelrsouzasnt@gmail.com](mailto:samuelrsouzasnt@gmail.com)
+- E-mail: [samuelrsouzasnt@gmail.com](mailto:samuelrsouzasnt@gmail.com)
+
+Licença [MIT](LICENSE).
