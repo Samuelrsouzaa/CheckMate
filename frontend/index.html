@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckMate - Premium</title>
+    <!-- Fonte Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ícones do FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <section id="login-section" class="login-wrapper active">
+        <div class="glass-login">
+            <div class="logo">
+                <i class="fa-solid fa-chess-knight neon-icon"></i>
+                <h1>Check<span>Mate</span></h1>
+                <p>O seu espaço de produtividade focado.</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="input-group hidden" id="name-group">
+                    <label><i class="fa-solid fa-user"></i> Nome</label>
+                    <input type="text" id="name" placeholder="Ex: Samuel">
+                </div>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-envelope"></i> E-mail</label>
+                    <input type="email" id="email" placeholder="samuel@teste.com" required>
+                </div>
+                <div class="input-group">
+                    <label><i class="fa-solid fa-lock"></i> Senha</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" id="auth-btn"><i class="fa-solid fa-right-to-bracket"></i> Entrar no Sistema</button>
+                <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                    <a href="#" id="toggle-mode" onclick="toggleAuthMode(event)" style="color: var(--primary); text-decoration: none; font-weight: bold;">Não tem conta? Cadastre-se</a>
+                </p>
+            </form>
+            <p id="login-error" class="error-msg"></p>
+        </div>
+    </section>
+
+    <!-- TELA DO DASHBOARD (Estilo SaaS Premium) -->
+    <section id="dashboard-section" class="dashboard-layout hidden">
+        
+        <!-- Menu Lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-chess-knight neon-icon"></i>
+                <h2>CheckMate</h2>
+            </div>
+            <nav class="menu">
+                <a href="#" id="menu-checklists" class="active" onclick="switchTab('checklists')"><i class="fa-solid fa-layer-group"></i> Meus Checklists</a>
+                <a href="#" id="menu-reports" onclick="switchTab('reports')"><i class="fa-solid fa-chart-pie"></i> Relatórios</a>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="info">
+                    <strong>Samuel R.</strong>
+                    <span>Admin</span>
+                </div>
+                <button onclick="logout()" class="btn-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </aside>
+
+        <!-- Área Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div>
+                    <h1 class="page-title">Visão Geral</h1>
+                    <p class="subtitle">Gerencie suas listas de tarefas com inteligência.</p>
+                </div>
+            </header>
+
+            <!-- Criador de Checklists -->
+            <div class="creator-card">
+                <div class="creator-inputs">
+                    <div class="input-icon">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <input type="text" id="new-checklist-title" placeholder="Ex: Projeto da Faculdade...">
+                    </div>
+                    <button onclick="createChecklist()" class="btn-gradient"><i class="fa-solid fa-plus"></i> Novo Checklist</button>
+                </div>
+            </div>
+
+            <!-- VISÃO: CHECKLISTS -->
+            <div id="view-checklists">
+                <!-- Grade de Checklists -->
+                <div id="checklist-grid" class="grid-container">
+                    <!-- Cards injetados via JS -->
+                </div>
+            </div>
+
+            <!-- VISÃO: RELATÓRIOS -->
+            <div id="view-reports" class="hidden">
+                <h2 style="margin-bottom: 20px;">Resumo de Desempenho</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fa-solid fa-list-check" style="color: var(--primary);"></i></div>
+                        <h3 id="kpi-total">0</h3>
+                        <p>Total de Tarefas</p>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fa-solid fa-check-double" style="color: var(--success);"></i></div>
+                        <h3 id="kpi-completed">0</h3>
+                        <p>Concluídas</p>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fa-solid fa-hourglass-half" style="color: var(--warning);"></i></div>
+                        <h3 id="kpi-pending">0</h3>
+                        <p>Pendentes</p>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i></div>
+                        <h3 id="kpi-late">0</h3>
+                        <p>Atrasadas</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>

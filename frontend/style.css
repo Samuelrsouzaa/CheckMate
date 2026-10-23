@@ -1,0 +1,196 @@
+/* ==================================
+   DESIGN SYSTEM - CHECKMATE PREMIUM
+   ================================== */
+   :root {
+    --bg-dark: #0b0f19;
+    --panel-bg: rgba(17, 24, 39, 0.7);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #6366f1; /* Indigo */
+    --secondary: #8b5cf6; /* Purple */
+    --danger: #f43f5e;
+    --success: #10b981;
+    --warning: #f59e0b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background: radial-gradient(circle at top left, #1e1b4b, var(--bg-dark));
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Utilitários Visuais */
+.hidden { display: none !important; }
+.active { display: block; }
+.neon-icon {
+    background: -webkit-linear-gradient(var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+}
+
+/* Telas e Login */
+.login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.glass-login {
+    background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border);
+    border-radius: 24px; padding: 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.logo { text-align: center; margin-bottom: 40px; }
+.logo h1 { font-size: 2.5rem; font-weight: 700; margin-top: 10px;}
+.logo span { color: var(--primary); }
+.logo p { color: var(--text-muted); font-size: 0.95rem; }
+
+/* Inputs e Botões */
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+.input-group input, .input-group select {
+    width: 100%; padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--panel-border); background: rgba(0, 0, 0, 0.3);
+    color: white; font-size: 1rem; transition: 0.3s; outline: none;
+}
+.input-group input:focus, .input-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); }
+.input-group select option { background: var(--bg-dark); }
+
+.btn-primary {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white; font-size: 1rem; font-weight: 600; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }
+.error-msg { color: var(--danger); text-align: center; margin-top: 15px; font-size: 0.9rem; }
+
+/* Dashboard Sidebar e Main */
+.dashboard-layout { display: flex; height: 100vh; }
+.sidebar {
+    width: 260px; background: rgba(15, 23, 42, 0.8); border-right: 1px solid var(--panel-border);
+    backdrop-filter: blur(10px); display: flex; flex-direction: column; padding: 24px;
+}
+.sidebar-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+.sidebar-logo h2 { font-size: 1.5rem; }
+.menu { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.menu a {
+    text-decoration: none; color: var(--text-muted); padding: 12px 16px; border-radius: 12px;
+    transition: 0.3s; font-weight: 500; display: flex; align-items: center; gap: 12px;
+}
+.menu a:hover, .menu a.active { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+.user-profile {
+    display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--panel-border);
+}
+.avatar {
+    width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex; justify-content: center; align-items: center;
+}
+.info { flex: 1; display: flex; flex-direction: column; }
+.info strong { font-size: 0.9rem; }
+.info span { font-size: 0.8rem; color: var(--text-muted); }
+.btn-icon { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; transition: 0.3s; padding: 8px; }
+.btn-icon:hover { color: var(--danger); }
+
+/* Main Area */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+.top-bar { margin-bottom: 30px; }
+.page-title { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+.subtitle { color: var(--text-muted); }
+
+/* Criador de Checklists */
+.creator-card {
+    background: var(--panel-bg); border: 1px solid var(--panel-border);
+    border-radius: 16px; padding: 20px; margin-bottom: 40px;
+}
+.creator-inputs { display: flex; gap: 15px; }
+.input-icon { flex: 1; position: relative; display: flex; align-items: center; }
+.input-icon i { position: absolute; left: 16px; color: var(--text-muted); }
+.input-icon input {
+    width: 100%; padding: 14px 14px 14px 45px; border-radius: 12px; border: 1px solid var(--panel-border);
+    background: rgba(0,0,0,0.3); color: white; font-size: 1rem; outline: none; transition: 0.3s;
+}
+.input-icon input:focus { border-color: var(--primary); }
+.btn-gradient {
+    padding: 0 24px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+}
+.btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4); }
+
+/* Cartões de Checklist e Tarefas (Grid) */
+.grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+.check-card {
+    background: var(--panel-bg); border: 1px solid var(--panel-border);
+    border-radius: 16px; padding: 24px; display: flex; flex-direction: column;
+}
+.check-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+.check-header h3 { font-size: 1.2rem; font-weight: 600; }
+.card-icon {
+    width: 40px; height: 40px; border-radius: 10px; background: rgba(99, 102, 241, 0.1);
+    color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+}
+.btn-delete {
+    background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.2);
+    padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+}
+.btn-delete:hover { background: var(--danger); color: white; }
+
+/* Formulário de Nova Tarefa */
+.task-creator {
+    background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 15px;
+    border: 1px solid var(--panel-border);
+}
+.task-creator input, .task-creator select {
+    width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--panel-border);
+    background: rgba(0,0,0,0.4); color: white; margin-bottom: 10px; font-size: 0.85rem; outline: none;
+}
+.task-creator .row { display: flex; gap: 10px; }
+.task-creator select { cursor: pointer; }
+.task-creator select option { background: var(--bg-dark); }
+.btn-add-task {
+    width: 100%; padding: 8px; border: none; border-radius: 8px; background: rgba(99, 102, 241, 0.2);
+    color: var(--primary); font-weight: 600; cursor: pointer; transition: 0.3s;
+}
+.btn-add-task:hover { background: var(--primary); color: white; }
+
+/* Lista de Tarefas (dentro do cartão) */
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; }
+.task-item {
+    background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-left: 3px solid var(--text-muted);
+}
+.task-item.status-DONE { opacity: 0.6; border-left-color: var(--success); }
+.task-item.status-DONE .task-title { text-decoration: line-through; color: var(--text-muted); }
+.task-info { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.task-title { font-size: 0.95rem; font-weight: 500; }
+.task-meta { display: flex; gap: 10px; font-size: 0.75rem; color: var(--text-muted); align-items: center; }
+
+/* Badges de Prioridade */
+.badge { padding: 3px 8px; border-radius: 20px; font-weight: 600; font-size: 0.7rem; }
+.badge-HIGH { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+.badge-MED { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+.badge-LOW { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
+
+.task-actions { display: flex; gap: 5px; margin-left: 10px; }
+.btn-check { background: rgba(16, 185, 129, 0.2); color: var(--success); border: none; padding: 6px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+.btn-check:hover { background: var(--success); color: white; }
+.btn-del-task { background: rgba(244, 63, 94, 0.2); color: var(--danger); border: none; padding: 6px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+.btn-del-task:hover { background: var(--danger); color: white; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+/* Relatórios (KPIs) */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.kpi-card {
+    background: var(--panel-bg); border: 1px solid var(--panel-border);
+    border-radius: 16px; padding: 25px; text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.kpi-icon { font-size: 2.5rem; margin-bottom: 15px; }
+.kpi-card h3 { font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; }
+.kpi-card p { color: var(--text-muted); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+

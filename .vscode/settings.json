@@ -1,0 +1,23 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.venv": true,
+        "**/postgres_data": true,
+        "**/alembic": true,
+        "**/tests": true,
+        "alembic.ini": true,
+        "pytest.ini": true,
+        "*.zip": true,
+        "roteiro_apresentacao.md": true,
+        "APRESENTACAO_PDF.html": true,
+        ".gitignore": true,
+        "limpar_comentarios.py": true
+    }
+}
